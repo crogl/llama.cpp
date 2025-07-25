@@ -1,6 +1,6 @@
 VERSION ?= 25.07.0
 
-.PHONY: build-cpu build-cuda build-rocm build-all clean ecr-login push-cpu
+.PHONY: build-cpu build-cuda build-rocm build-all clean ecr-login push-cpu push-cuda push-rocm push-all
 
 build-cpu:
 	@echo "🔧 Building lm-cpu:${VERSION}"
@@ -44,3 +44,11 @@ push-cuda: ecr-login
 	docker tag lm-cuda:${VERSION} $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/crogl:lm-cuda-${VERSION}
 	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/crogl:lm-cuda-${VERSION}
 	@echo "✅ Push complete: crogl:lm-cuda-${VERSION}"
+
+push-rocm: ecr-login
+	@echo "🚀 Pushing lm-rocm:${VERSION} to ECR repository 'crogl'..."
+	docker tag lm-cuda:${VERSION} $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/crogl:lm-cuda-${VERSION}
+	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/crogl:lm-cuda-${VERSION}
+	@echo "✅ Push complete: crogl:lm-rocm-${VERSION}"
+
+push-all: push-cpu push-cuda
