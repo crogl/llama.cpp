@@ -1,4 +1,4 @@
-VERSION ?= 25.07.0
+VERSION ?= 25.07.1
 
 .PHONY: build-cpu build-cuda build-rocm build-all clean ecr-login push-cpu push-cuda push-rocm push-all
 
