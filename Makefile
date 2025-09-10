@@ -1,9 +1,8 @@
-define newline
 
+.PHONY: build-cpp
+build-cpp:
+	docker build -t llama.cpp:server -f .devops/cpu.Dockerfile .
 
-endef
-
-$(error Build system changed:$(newline)\
-The Makefile build has been replaced by CMake.$(newline)$(newline)\
-For build instructions see:$(newline)\
-https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md$(newline)${newline})
+.PHONY: build-cuda
+build-cuda:
+	docker build -t llama.cpp:server-cuda --target server -f .devops/cuda.Dockerfile .

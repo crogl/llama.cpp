@@ -5,14 +5,20 @@ FROM ubuntu:$UBUNTU_VERSION AS build
 ARG TARGETARCH
 
 RUN apt-get update && \
-    apt-get install -y build-essential git cmake libcurl4-openssl-dev
+    apt-get install -y build-essential git cmake libcurl4-openssl-dev libssl-dev
 
 WORKDIR /app
 
 COPY . .
 
 RUN if [ "$TARGETARCH" = "amd64" ] || [ "$TARGETARCH" = "arm64" ]; then \
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DGGML_NATIVE=OFF -DLLAMA_BUILD_TESTS=OFF -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON; \
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+            -DGGML_NATIVE=OFF \
+            -DLLAMA_BUILD_TESTS=OFF \
+            -DLLAMA_BUILD_EXAMPLES=OFF \
+            -DLLAMA_SERVER_SSL=ON \
+            -DGGML_BACKEND_DL=ON \
+            -DGGML_CPU_ALL_VARIANTS=ON; \
     else \
         echo "Unsupported architecture"; \
         exit 1; \
